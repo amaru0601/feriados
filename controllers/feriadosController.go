@@ -8,6 +8,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/gommon/log"
 )
 
 type FeriadosController struct {
@@ -43,7 +44,9 @@ func (ctrl FeriadosController) GetFeriados(c echo.Context) error {
 	startDate := c.QueryParam("startDate")
 	endDate := c.QueryParam("endDate")
 
-	var response []models.Data
+	log.Warnf("requesting GetFeriados")
+
+	response := ctrl.svc.Feriados.Data
 
 	if eventType != "" {
 		response = ctrl.svc.FilterByType(eventType)

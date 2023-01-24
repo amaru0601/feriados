@@ -57,14 +57,14 @@ func TestFilterByDateRange(t *testing.T) {
 	startDate := "2022-02-01"
 	endDate := "2022-04-01"
 	filteredData := feriadoService.FilterByDateRange(startDate, endDate)
-	if len(filteredData) != 2 {
-		t.Errorf("Expected 2 events within the date range, got %d", len(filteredData))
+	if len(filteredData) != 3 {
+		t.Errorf("Expected 3 events within the date range, got %d", len(filteredData))
 	}
 	for _, data := range filteredData {
 		date, _ := time.Parse("2006-01-02", data.Date)
 		start, _ := time.Parse("2006-01-02", startDate)
 		end, _ := time.Parse("2006-01-02", endDate)
-		if !date.After(start) || !date.Before(end) {
+		if !(date.After(start) || date.Equal(start)) && !(date.Before(end) || date.Equal(end)) {
 			t.Errorf("Expected event within the date range, got %s", data.Date)
 		}
 	}

@@ -23,9 +23,16 @@ func (svc FeriadoService) FilterByType(eventType string) []models.Data {
 	return filteredData
 }
 
-func (svc FeriadoService) FilterByDateRange(startDate, endDate string) []models.Data {
-	start, _ := time.Parse("2006-01-02", startDate)
-	end, _ := time.Parse("2006-01-02", endDate)
+func (svc FeriadoService) FilterByDateRange(startDate, endDate string) ([]models.Data, error) {
+	start, err := time.Parse("2006-01-02", startDate)
+	if err != nil {
+		return nil, err
+	}
+	end, err := time.Parse("2006-01-02", endDate)
+	if err != nil {
+		return nil, err
+	}
+
 	filteredData := make([]models.Data, 0)
 	for _, d := range svc.Feriados.Data {
 		date, _ := time.Parse("2006-01-02", d.Date)
@@ -33,5 +40,5 @@ func (svc FeriadoService) FilterByDateRange(startDate, endDate string) []models.
 			filteredData = append(filteredData, d)
 		}
 	}
-	return filteredData
+	return filteredData, nil
 }

@@ -46,17 +46,22 @@ func (ctrl FeriadosController) GetFeriados(c echo.Context) error {
 
 	log.Infof("requesting GetFeriados")
 
-	response := ctrl.svc.Feriados.Data
+	apiResponse := ctrl.svc.Feriados.Data
 
 	if eventType != "" {
 		log.Infof("filtering by type")
-		response = ctrl.svc.FilterByType(eventType)
+		apiResponse = ctrl.svc.FilterByType(eventType)
 	}
 
 	if startDate != "" && endDate != "" {
 		log.Infof("filtering by date range")
-		response = ctrl.svc.FilterByDateRange(startDate, endDate)
+		var err error
+		apiResponse, err = ctrl.svc.FilterByDateRange(startDate, endDate)
+		if err != nil {
+			log.Warnf("bad request with date range")
+			return c.JSON(http.StatusBadRequest, err)
+		}
 	}
 
-	return c.JSON(http.StatusOK, response)
+	return c.JSON(http.StatusOK, apiResponse)
 }

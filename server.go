@@ -13,11 +13,13 @@ func main() {
 
 	e.Use(middleware.CORS())
 
+	// Initializing controller to obtain Feriados
 	feriadosController, err := controllers.NewFeriadosController()
 	if err != nil {
 		panic(err)
 	}
 
+	// Handling requests
 	e.GET("/feriados", feriadosController.GetFeriados)
 
 	// Start server

@@ -44,15 +44,17 @@ func (ctrl FeriadosController) GetFeriados(c echo.Context) error {
 	startDate := c.QueryParam("startDate")
 	endDate := c.QueryParam("endDate")
 
-	log.Warnf("requesting GetFeriados")
+	log.Infof("requesting GetFeriados")
 
 	response := ctrl.svc.Feriados.Data
 
 	if eventType != "" {
+		log.Infof("filtering by type")
 		response = ctrl.svc.FilterByType(eventType)
 	}
 
 	if startDate != "" && endDate != "" {
+		log.Infof("filtering by date range")
 		response = ctrl.svc.FilterByDateRange(startDate, endDate)
 	}
 
